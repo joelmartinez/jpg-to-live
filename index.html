@@ -28,30 +28,36 @@ p
 var wait = new Image();
 wait.src = "http://wait.jpg.to";
 
+var globalCounter = 0;
+
 $(function() {
     var txt = $("#txt"),
         out = $("#out");
     txt.keyup(function() {
-    delay(function(){
-        var input = txt.val().split(" ").join("_"),
-            newsrc = "http://" + input + ".jpg.to";
+    	var localCounter = ++globalCounter;
 
-        if (input) {
-        	out.attr("src", wait.src);
-        	
-        	var loader = new Image();
-            loader.src = newsrc;
-            loader.onload = function () {
-                out.attr("src", loader.src);
-            };
-            this.images[name] = img;
-            out.attr("src", newsrc).show();
-        }
-        else {
-            out.hide();
-        }
-    }, 100 );
-});
+	    delay(function(){
+	        var input = txt.val().split(" ").join("_"),
+	            newsrc = "http://" + input + ".jpg.to";
+
+	        if (input) {
+	        	out.attr("src", wait.src);
+
+	        	var loader = new Image();
+	            loader.src = newsrc;
+	            loader.onload = function () {
+	            	if (localCounter == globalCounter) { 
+	                	out.attr("src", loader.src);
+	            	}
+	            };
+	            this.images[name] = img;
+	            out.attr("src", newsrc).show();
+	        }
+	        else {
+	            out.hide();
+	        }
+	    }, 100 );
+	});
 });
 
 // nifty function from: http://stackoverflow.com/a/1909508/5416
